@@ -40,7 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
                             + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                             + MessageColumns.MSG_TYPE + " INTEGER NOT NULL,"
                             + MessageColumns.MSG_MESSAGE + " TEXT NOT NULL,"
-                            + MessageColumns.MSG_SENT + " INTEGER DEFAULT 0)"
+                            + MessageColumns.MSG_SENT + " INTEGER DEFAULT 1)"
             );
         }catch (Exception ex){}
 
@@ -54,7 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // If you need to add a column
         if (newVersion > oldVersion) {
             db.execSQL("ALTER TABLE "+Tables.MESSAGES+" " +
-                    "ADD COLUMN "+MessageColumns.MSG_SENT+" INTEGER DEFAULT 0");
+                    "ADD COLUMN "+MessageColumns.MSG_SENT+" INTEGER DEFAULT 1");
         }
 
         onCreate(db);

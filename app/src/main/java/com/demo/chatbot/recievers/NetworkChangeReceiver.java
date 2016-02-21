@@ -31,13 +31,15 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
         if (wifi.isAvailable() || mobile.isAvailable()) {
             // Do something
-            Toast.makeText(context, "Network came back syncing unsent messages", Toast.LENGTH_SHORT).show();
             ArrayList<ChatMessage> messagesToSync = MessageHelper.getInstance(context).getMessagesToSync();
+            Toast.makeText(context, "Network came back syncing unsent messages:" + messagesToSync.size(), Toast.LENGTH_SHORT).show();
             for (ChatMessage message :messagesToSync) {
                 MessageService.startActionSync(context,
                         String.valueOf(message.getId()),
                         message.getMessage());
             }
+
+
             
         }
     }

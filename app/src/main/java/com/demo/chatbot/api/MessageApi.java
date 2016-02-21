@@ -29,19 +29,7 @@ public class MessageApi {
     public void sendMessage(final ChatMessage message){
         // Instantiate the RequestQueue.
         RequestQueue queue = ChatBotApi.queue;
-
-        String url ="http://www.personalityforge.com/api/chat?" +
-                "apiKey=_API_KEY_&" +
-                "message=_MESSAGE_&" +
-                "chatBotID=_CHAT_BOT_ID_&" +
-                "externalID=_EXT_ID_";
-
-        url = url.replace("_API_KEY_", ChatBotStatics.API_KEY);
-        url = url.replace("_MESSAGE_", message.getMessage());
-        url = url.replace("_CHAT_BOT_ID_", ChatBotStatics.CHAT_BOT_ID);
-        url = url.replace("_EXT_ID_", ChatBotStatics.EXTERNAL_ID);
-
-
+        String url = ChatBotStatics.getUrl(message.getMessage());
         // Request a string response from the provided URL.
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
