@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
 
     @Override
     public void gotResponse(BotResponse response) {
-//        Toast.makeText(getApplicationContext(), response.getMessage().getMessage(), Toast.LENGTH_SHORT).show();
         ChatMessage msg = new ChatMessage(
                 ChatMessage.MSG_RECIEVED,
                 response.getMessage().getMessage()
