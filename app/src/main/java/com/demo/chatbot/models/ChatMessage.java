@@ -3,13 +3,15 @@ package com.demo.chatbot.models;
 /**
  * Created by root on 21/2/16.
  */
-public class ChatMessage extends Message {
+public class ChatMessage {
 
     public static int MSG_SENT = 1;
-    public static int MSG_RECIEVED = 1;
+    public static int MSG_RECIEVED = 2;
 
     private int type;
-
+    private String message;
+    private String senderName;
+    private int senderId;
 
     public ChatMessage(){
 
@@ -26,5 +28,29 @@ public class ChatMessage extends Message {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 }

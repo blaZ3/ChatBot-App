@@ -5,7 +5,7 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.demo.chatbot.interfaces.ChatBotInterface;
-import com.demo.chatbot.models.BotResponse;
+import com.demo.chatbot.models.pojo.BotResponse;
 import com.demo.chatbot.models.ChatMessage;
 
 /**
@@ -33,11 +33,8 @@ public class ChatBotApi {
     }
 
 
-    public BotResponse sendMessage(String _msg){
-        messageApi.sendMessage(new ChatMessage(
-                ChatMessage.MSG_SENT,
-                _msg
-        ));
+    public BotResponse sendMessage(ChatMessage _msg){
+        messageApi.sendMessage(_msg);
         return null;
     }
 

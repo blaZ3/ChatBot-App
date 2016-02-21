@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.demo.chatbot.api.ChatBotApi;
 import com.demo.chatbot.interfaces.ChatBotInterface;
-import com.demo.chatbot.models.BotResponse;
+import com.demo.chatbot.models.ChatMessage;
+import com.demo.chatbot.models.pojo.BotResponse;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ChatBotInterface {
 
@@ -22,6 +24,10 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
 
     EditText editTextMessage;
     ImageButton btnSend;
+
+    ArrayList<ChatMessage> messages;
+
+    ChatMessageAdapter chatMessageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +43,24 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
         recyclerChat.setHasFixedSize(true);
         recyclerChat.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
+        messages = new ArrayList<>();
+        chatMessageAdapter = new ChatMessageAdapter(messages);
+        recyclerChat.setAdapter(chatMessageAdapter);
     }
 
     View.OnClickListener doSend = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (editTextMessage.getText().toString().length() > 0){
-                ChatBotApi.getInstance(MainActivity.this).sendMessage(editTextMessage.getText().toString());
+                ChatMessage msg = new ChatMessage(
+                        ChatMessage.MSG_SENT,
+                        editTextMessage.getText().toString()
+                );
+                messages.add(msg);
+                chatMessageAdapter.notifyDataSetChanged();
+                recyclerChat.smoothScrollToPosition(messages.size()-1);
+                editTextMessage.setText("");
+                ChatBotApi.getInstance(MainActivity.this).sendMessage(msg);
             }else{
                 Log.d(TAG, "Empty message");
             }
@@ -52,6 +69,18 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
 
     @Override
     public void gotResponse(BotResponse response) {
-        Toast.makeText(getApplicationContext(), response.getMessage().getMessage(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), response.getMessage().getMessage(), Toast.LENGTH_SHORT).show();
+        ChatMessage msg = new ChatMessage(
+                ChatMessage.MSG_RECIEVED,
+                response.getMessage().getMessage()
+        );
+        try{
+            getSupportActionBar().setTitle(response.getMessage().getChatBotName());
+        }catch (Exception ex){
+            Log.e(TAG, ex.getMessage());
+        }
+        messages.add(msg);
+        chatMessageAdapter.notifyDataSetChanged();
+        recyclerChat.smoothScrollToPosition(messages.size()-1);
     }
 }

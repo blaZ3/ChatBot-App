@@ -1,5 +1,5 @@
 
-package com.demo.chatbot.models;
+package com.demo.chatbot.models.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

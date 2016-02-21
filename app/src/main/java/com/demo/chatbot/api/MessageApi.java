@@ -9,7 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.demo.chatbot.helpers.ChatBotStatics;
 import com.demo.chatbot.interfaces.ChatBotInterface;
-import com.demo.chatbot.models.BotResponse;
+import com.demo.chatbot.models.pojo.BotResponse;
 import com.demo.chatbot.models.ChatMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
