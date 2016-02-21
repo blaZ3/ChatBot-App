@@ -11,7 +11,7 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "DB_Helper";
     private static final String DATABASE_NAME = "chatbot.db";
-    private static final int CURR_DB_VERSION = 1;
+    private static final int CURR_DB_VERSION = 2;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, CURR_DB_VERSION);
@@ -28,6 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public interface MessageColumns {
         String MSG_TYPE = "message_type";
         String MSG_MESSAGE = "message";
+        String MSG_SENT = "message_sent";
     }
 
 
@@ -38,6 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "CREATE TABLE " + Tables.MESSAGES + " ("
                             + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                             + MessageColumns.MSG_TYPE + " INTEGER NOT NULL,"
+                            + MessageColumns.MSG_SENT + " INTEGER DEFAULT 0,"
                             + MessageColumns.MSG_MESSAGE + " TEXT NOT NULL)"
             );
         }catch (Exception ex){}
@@ -49,6 +51,11 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "onUpgrade() from " + oldVersion + " to " + newVersion);
 
         //check and make and schema changes
+        // If you need to add a column
+        if (newVersion > oldVersion) {
+            db.execSQL("ALTER TABLE "+Tables.MESSAGES+" " +
+                    "ADD COLUMN "+MessageColumns.MSG_SENT+" INTEGER DEFAULT 0");
+        }
 
         onCreate(db);
     }

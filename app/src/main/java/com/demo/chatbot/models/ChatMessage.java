@@ -8,6 +8,7 @@ public class ChatMessage {
     public static int MSG_SENT = 1;
     public static int MSG_RECIEVED = 2;
 
+    private long id;
     private int type;
     private String message;
     private String senderName;
@@ -52,5 +53,13 @@ public class ChatMessage {
 
     public void setSenderId(int senderId) {
         this.senderId = senderId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

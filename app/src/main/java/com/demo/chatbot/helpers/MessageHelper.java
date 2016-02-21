@@ -46,17 +46,36 @@ public class MessageHelper {
         return db != null && db.isOpen();
     }
 
-    public boolean save(ChatMessage msg){
+    public long save(ChatMessage msg){
         ContentValues values = new ContentValues();
         values.put(DBHelper.MessageColumns.MSG_TYPE, msg.getType());
         values.put(DBHelper.MessageColumns.MSG_MESSAGE, msg.getMessage());
+        values.put(DBHelper.MessageColumns.MSG_SENT, 0);
 
         try{
             long insertId = db.insert(DBHelper.Tables.MESSAGES, null, values);
             if (insertId == -1) {
-                return false;
+                return -1;
             }else {
+                return insertId;
+            }
+        }catch (Exception ex){
+            return -1;
+        }
+    }
+
+    public boolean setAsSynced(int id){
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.MessageColumns.MSG_SENT, 1);
+
+        try{
+            int rows_affected = db.update(DBHelper.Tables.MESSAGES,
+                    values,
+                    DBHelper.BaseColumns._ID+"=" + id, null);
+            if (rows_affected > 0) {
                 return true;
+            }else {
+                return false;
             }
         }catch (Exception ex){
             return false;
@@ -70,8 +89,25 @@ public class MessageHelper {
                 + DBHelper.BaseColumns._ID + " ASC", null);
         while (cursor.moveToNext()){
             ChatMessage message = new ChatMessage();
+            message.setId(cursor.getInt(0));
             message.setType(cursor.getInt(1));
-            message.setMessage(cursor.getString(2));
+            message.setMessage(cursor.getString(3));
+
+            messages.add(message);
+        }
+
+        return messages;
+    }
+
+    public ArrayList<ChatMessage> getMessagesToSync(){
+        ArrayList<ChatMessage> messages = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DBHelper.Tables.MESSAGES
+                + " WHERE "+DBHelper.MessageColumns.MSG_SENT+" = 0 ", null);
+        while (cursor.moveToNext()){
+            ChatMessage message = new ChatMessage();
+            message.setId(cursor.getInt(0));
+            message.setType(cursor.getInt(1));
+            message.setMessage(cursor.getString(3));
 
             messages.add(message);
         }

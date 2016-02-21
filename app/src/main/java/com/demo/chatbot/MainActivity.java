@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.demo.chatbot.api.ChatBotApi;
 import com.demo.chatbot.helpers.MessageHelper;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
 
                 //add message
                 messages.add(msg);
-                messageHelper.save(msg);
+                msg.setId(messageHelper.save(msg));
 
                 //update chat list
                 chatMessageAdapter.notifyDataSetChanged();
@@ -82,12 +83,14 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
         }
     };
 
+
     @Override
-    public void gotResponse(BotResponse response) {
+    public void gotResponse(int id, BotResponse response) {
         ChatMessage msg = new ChatMessage(
                 ChatMessage.MSG_RECIEVED,
                 response.getMessage().getMessage()
         );
+        messageHelper.setAsSynced(id);
         try{
             getSupportActionBar().setTitle(response.getMessage().getChatBotName());
         }catch (Exception ex){
@@ -102,5 +105,10 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
         //update chat list
         chatMessageAdapter.notifyDataSetChanged();
         recyclerChat.smoothScrollToPosition(messages.size()-1);
+    }
+
+    @Override
+    public void onError(ChatMessage msg) {
+        Toast.makeText(getApplicationContext(), "Failed to send message", Toast.LENGTH_SHORT).show();
     }
 }

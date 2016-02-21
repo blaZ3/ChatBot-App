@@ -26,7 +26,7 @@ public class MessageApi {
     public MessageApi(){
     }
 
-    public void sendMessage(ChatMessage message){
+    public void sendMessage(final ChatMessage message){
         // Instantiate the RequestQueue.
         RequestQueue queue = ChatBotApi.queue;
 
@@ -50,13 +50,19 @@ public class MessageApi {
                         response = response.replace("\n\n\n\n", "");
                         Gson gson = new GsonBuilder().serializeNulls().create();
                         BotResponse botResponse = gson.fromJson(response, BotResponse.class);
-                        callback.gotResponse(botResponse);
+                        if (callback != null){
+                            callback.gotResponse(Integer.parseInt(String.valueOf(message.getId())),
+                                    botResponse);
+                        }
                         Log.d(TAG, response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "That didn't work!");
+                if(callback != null){
+                    callback.onError(message);
+                }
             }
         });
 
