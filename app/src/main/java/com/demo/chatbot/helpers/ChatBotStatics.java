@@ -11,6 +11,6 @@ public class ChatBotStatics {
 
     public static String API_KEY = "6nt5d1nJHkqbkphe";
     public static String CHAT_BOT_ID = "63906";
-    public static String EXTERNAL_ID = "chirag3";
+    public static String EXTERNAL_ID = "abc";
 
 }

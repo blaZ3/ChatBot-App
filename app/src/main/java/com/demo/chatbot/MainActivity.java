@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.demo.chatbot.api.ChatBotApi;
+import com.demo.chatbot.helpers.MessageHelper;
 import com.demo.chatbot.interfaces.ChatBotInterface;
 import com.demo.chatbot.models.ChatMessage;
 import com.demo.chatbot.models.pojo.BotResponse;
@@ -29,10 +30,14 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
 
     ChatMessageAdapter chatMessageAdapter;
 
+    MessageHelper messageHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        messageHelper = MessageHelper.getInstance(MainActivity.this);
 
         recyclerChat = (RecyclerView)findViewById(R.id.recycler_chat);
         editTextMessage = (EditText) findViewById(R.id.editTxtMessage);
@@ -43,9 +48,10 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
         recyclerChat.setHasFixedSize(true);
         recyclerChat.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        messages = new ArrayList<>();
+        messages = messageHelper.getMessages();
         chatMessageAdapter = new ChatMessageAdapter(messages);
         recyclerChat.setAdapter(chatMessageAdapter);
+        recyclerChat.smoothScrollToPosition(messages.size()-1);
     }
 
     View.OnClickListener doSend = new View.OnClickListener() {
@@ -56,10 +62,19 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
                         ChatMessage.MSG_SENT,
                         editTextMessage.getText().toString()
                 );
+
+                //add message
                 messages.add(msg);
+                messageHelper.save(msg);
+
+                //update chat list
                 chatMessageAdapter.notifyDataSetChanged();
                 recyclerChat.smoothScrollToPosition(messages.size()-1);
+
+                //clear edit text
                 editTextMessage.setText("");
+
+                //send to server
                 ChatBotApi.getInstance(MainActivity.this).sendMessage(msg);
             }else{
                 Log.d(TAG, "Empty message");
@@ -78,7 +93,13 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
         }catch (Exception ex){
             Log.e(TAG, ex.getMessage());
         }
+
+        //add message
         messages.add(msg);
+        messageHelper.save(msg);
+
+
+        //update chat list
         chatMessageAdapter.notifyDataSetChanged();
         recyclerChat.smoothScrollToPosition(messages.size()-1);
     }
