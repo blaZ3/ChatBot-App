@@ -9,16 +9,16 @@ public class Message {
 
     @SerializedName("chatBotName")
     @Expose
-    private String chatBotName;
+    protected String chatBotName;
     @SerializedName("chatBotID")
     @Expose
-    private Integer chatBotID;
+    protected Integer chatBotID;
     @SerializedName("message")
     @Expose
-    private String message;
+    protected String message;
     @SerializedName("emotion")
     @Expose
-    private Object emotion;
+    protected Object emotion;
 
     /**
      * 
