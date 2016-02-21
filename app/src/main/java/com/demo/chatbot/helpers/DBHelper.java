@@ -39,8 +39,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     "CREATE TABLE " + Tables.MESSAGES + " ("
                             + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                             + MessageColumns.MSG_TYPE + " INTEGER NOT NULL,"
-                            + MessageColumns.MSG_SENT + " INTEGER DEFAULT 0,"
-                            + MessageColumns.MSG_MESSAGE + " TEXT NOT NULL)"
+                            + MessageColumns.MSG_MESSAGE + " TEXT NOT NULL,"
+                            + MessageColumns.MSG_SENT + " INTEGER DEFAULT 0)"
             );
         }catch (Exception ex){}
 

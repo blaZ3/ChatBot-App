@@ -52,7 +52,9 @@ public class MainActivity extends AppCompatActivity implements ChatBotInterface 
         messages = messageHelper.getMessages();
         chatMessageAdapter = new ChatMessageAdapter(messages);
         recyclerChat.setAdapter(chatMessageAdapter);
-        recyclerChat.smoothScrollToPosition(messages.size()-1);
+        if(messages.size()>0){
+            recyclerChat.smoothScrollToPosition(messages.size()-1);
+        }
     }
 
     View.OnClickListener doSend = new View.OnClickListener() {

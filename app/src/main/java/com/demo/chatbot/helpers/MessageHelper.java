@@ -91,7 +91,7 @@ public class MessageHelper {
             ChatMessage message = new ChatMessage();
             message.setId(cursor.getInt(0));
             message.setType(cursor.getInt(1));
-            message.setMessage(cursor.getString(3));
+            message.setMessage(cursor.getString(2));
 
             messages.add(message);
         }
@@ -107,7 +107,7 @@ public class MessageHelper {
             ChatMessage message = new ChatMessage();
             message.setId(cursor.getInt(0));
             message.setType(cursor.getInt(1));
-            message.setMessage(cursor.getString(3));
+            message.setMessage(cursor.getString(2));
 
             messages.add(message);
         }
